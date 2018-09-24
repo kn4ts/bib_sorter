@@ -38,24 +38,26 @@ def parser():
     return paper_list
 
 class Paper:    #論文クラス
-    def __init__(self,title,year,author,keyword,ID):
-        self.title = title
+    def __init__(self,title,year,author,keyword):
+        self.ID = title
         self.year = int(year)
         self.keyword = keyword
         self.author = author
-        self.ID = ID
+        #self.ID = ID
 
 def main():  #論文リストを受け取る
 
     paper = parser()
+    print(paper)
+    paper_list = []
     
     for i in range(len(paper)):
         title = paper[i]['title']
         year = paper[i]['year']
         keyword = paper[i]['keyword']
         author = paper[i]['author']
-        ID = paper[i]['ID']
-        paper_list.append(Paper(title,year,author,keyword,ID))
+        #ID = paper[i]['ID']
+        paper_list.append(Paper(title,year,author,keyword))
 
     paper_list = sorted(paper_list, key=attrgetter('year'))
 
@@ -66,9 +68,9 @@ def main():  #論文リストを受け取る
     title = []
     keyword = []
 
-    for e in date:
+    for e in paper_list:
         year.append(e.year)
-        title.append(e.title)
+        #title.append(e.title)
         ID.append(e.ID)
         if e.keyword=='M':
             e.keyword = 0
@@ -82,6 +84,7 @@ def main():  #論文リストを受け取る
 
     for(i,j,k) in zip(keyword,year,ID):
         plt.scatter(i,j)
+        plt.xticks([0,1,2],['M','E','I'])
         plt.annotate(k,xy=(i,j))
 
     plt.show()

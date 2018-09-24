@@ -36,8 +36,10 @@ def parser():
         # print(line.strip())
     bibfile.close()
     print(paper_list)
+    print(len(paper_list))
 
     return paper_list
+
 
 
 if __name__=='__main__':
