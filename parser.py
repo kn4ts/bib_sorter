@@ -14,15 +14,20 @@ def parser():
 
     bibfile = open('./reference.bib','r')
     # bibfile = open('./anarticle.bib','r')
+
+    # num_of_art=
+
     for line in bibfile:
     #     char_list = line.split('=')
+        char_list = [ x.strip('@{ "",\n') for x in re.split('[{=]',line)]
         if line[0]=='@':
-            paper_list.append(temp)
             temp.clear()
             # print('aaaaaaaaaaaaaaaaaaaaaaaaa')
         else:
-            char_list = [ x.strip('@{ "",\n}') for x in re.split('[{=]',line)]
-            if char_list[0]=='title':
+            if char_list[0]=='inproceedings':
+                # print('AAAAAAAAAAAAAAAAAAAAAAAAAAA')
+                temp["ID"] = char_list[1]
+            elif char_list[0]=='title':
                 temp["title"] = char_list[1]
             elif char_list[0]=='year':
                 temp["year"] = char_list[1]
@@ -31,9 +36,15 @@ def parser():
             elif char_list[0]=='keyword':
                 temp["keyword"] = char_list[1]
             # print(temp)
-            # print(char_list)
             # print('aaaaaaaaaaaaaaaaaaaaaaaaaaa')
+
+        if line[0]=='}':
+            paper_list.append(temp.copy())
+
+        # print(line[0])            
+        # print(char_list)
         # print(line.strip())
+        # print(temp)
     bibfile.close()
     print(paper_list)
 
