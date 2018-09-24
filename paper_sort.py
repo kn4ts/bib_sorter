@@ -1,12 +1,8 @@
 #!/usr/bin/python
 #coding:utf-8
 import numpy as np
-import math
-import numpy as np
 import matplotlib.pyplot as plt
 from operator import attrgetter
-
-
 
 class Paper:    #論文クラス
     def __init__(self,title,year,author,keyword,ID):
@@ -76,6 +72,5 @@ if __name__ == '__main__':     #テスト
     year_ls = []
 
     graph_plot(a)
-
 
 
