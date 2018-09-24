@@ -3,6 +3,39 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from operator import attrgetter
+import re
+
+def parser():
+
+    paper_list = []
+    temp ={}
+
+    bibfile = open('./reference.bib','r')
+    # bibfile = open('./anarticle.bib','r')
+    for line in bibfile:
+    #     char_list = line.split('=')
+        if line[0]=='@':
+            paper_list.append(temp)
+            temp.clear()
+            # print('aaaaaaaaaaaaaaaaaaaaaaaaa')
+        else:
+            char_list = [ x.strip('@{ "",\n}') for x in re.split('[{=]',line)]
+            if char_list[0]=='title':
+                temp["title"] = char_list[1]
+            elif char_list[0]=='year':
+                temp["year"] = char_list[1]
+            elif char_list[0]=='author':
+                temp["author"] = char_list[1]
+            elif char_list[0]=='keyword':
+                temp["keyword"] = char_list[1]
+            # print(temp)
+            # print(char_list)
+            # print('aaaaaaaaaaaaaaaaaaaaaaaaaaa')
+        # print(line.strip())
+    bibfile.close()
+    #print(paper_list)
+
+    return paper_list
 
 class Paper:    #論文クラス
     def __init__(self,title,year,author,keyword,ID):
@@ -12,11 +45,9 @@ class Paper:    #論文クラス
         self.author = author
         self.ID = ID
 
+def main():  #論文リストを受け取る
 
-
-def main(paper):  #論文リストを受け取る
-
-    paper_list = []
+    paper = parser()
     
     for i in range(len(paper)):
         title = paper[i]['title']
@@ -28,9 +59,7 @@ def main(paper):  #論文リストを受け取る
 
     paper_list = sorted(paper_list, key=attrgetter('year'))
 
-    return paper_list
-
-def graph_plot(date):
+    #グラフの描画
 
     year = []
     ID = []
@@ -57,20 +86,8 @@ def graph_plot(date):
 
     plt.show()
 
-   
-if __name__ == '__main__':     #テスト
+    #return paper_list
 
-    paper = [{'title':'A','year':6,'author':'kuso','keyword':'M','ID':'ID'},
-            {'title':'B','year':8,'author':'hoge','keyword':'I','ID':'ID'},
-            {'title':'C','year':3,'author':'yamamoto','keyword':'E','ID':'ID'},
-            {'title':'D','year':9,'author':'suzuki','keyword':'M','ID':'ID'},
-            {'title':'E','year':2,'author':'murata','keyword':'E','ID':'ID'},
-            {'title':'F','year':1,'author':'tamura','keyword':'I','ID':'ID'}]
-
-    a = main(paper)
-
-    year_ls = []
-
-    graph_plot(a)
-
+if __name__=='__main__':
+    main()
 
