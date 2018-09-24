@@ -2,7 +2,11 @@
 #coding:utf-8
 import numpy as np
 import math
+import numpy as np
+import matplotlib.pyplot as plt
 from operator import attrgetter
+
+
 
 class Paper:    #論文クラス
     def __init__(self,title,year,author,keyword,ID):
@@ -29,6 +33,34 @@ def main(paper):  #論文リストを受け取る
     paper_list = sorted(paper_list, key=attrgetter('year'))
 
     return paper_list
+
+def graph_plot(date):
+
+    year = []
+    ID = []
+    title = []
+    keyword = []
+
+    for e in date:
+        year.append(e.year)
+        title.append(e.title)
+        ID.append(e.ID)
+        if e.keyword=='M':
+            e.keyword = 0
+            keyword.append(e.keyword)
+        elif e.keyword=='E':
+            e.keyword = 1
+            keyword.append(e.keyword)
+        elif e.keyword=='I':
+            e.keyword = 2
+            keyword.append(e.keyword)
+
+    for(i,j,k) in zip(keyword,year,ID):
+        plt.scatter(i,j)
+        plt.annotate(k,xy=(i,j))
+
+    plt.show()
+
    
 if __name__ == '__main__':     #テスト
 
@@ -43,7 +75,7 @@ if __name__ == '__main__':     #テスト
 
     year_ls = []
 
-    print(a)
-    for i in a:
-        print(i.year)
+    graph_plot(a)
+
+
 
