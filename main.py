@@ -12,15 +12,20 @@ def parser():
 
     bibfile = open('./reference.bib','r')
     # bibfile = open('./anarticle.bib','r')
+
+    # num_of_art=
+
     for line in bibfile:
     #     char_list = line.split('=')
+        char_list = [ x.strip('@{ "",\n') for x in re.split('[{=]',line)]
         if line[0]=='@':
-            paper_list.append(temp)
             temp.clear()
             # print('aaaaaaaaaaaaaaaaaaaaaaaaa')
         else:
-            char_list = [ x.strip('@{ "",\n}') for x in re.split('[{=]',line)]
-            if char_list[0]=='title':
+            if char_list[0]=='inproceedings':
+                # print('AAAAAAAAAAAAAAAAAAAAAAAAAAA')
+                temp["ID"] = char_list[1]
+            elif char_list[0]=='title':
                 temp["title"] = char_list[1]
             elif char_list[0]=='year':
                 temp["year"] = char_list[1]
@@ -29,33 +34,42 @@ def parser():
             elif char_list[0]=='keyword':
                 temp["keyword"] = char_list[1]
             # print(temp)
-            # print(char_list)
             # print('aaaaaaaaaaaaaaaaaaaaaaaaaaa')
+
+        if line[0]=='}':
+            paper_list.append(temp.copy())
+
+        # print(line[0])            
+        # print(char_list)
         # print(line.strip())
+        # print(temp)
     bibfile.close()
-    #print(paper_list)
+#    print(paper_list)
+#    print(len(paper_list))
 
     return paper_list
 
 class Paper:    #論文クラス
-    def __init__(self,title,year,author,keyword,ID):
-        self.title = title
+    def __init__(self,title,year,author,keyword):
+        self.ID = title
         self.year = int(year)
         self.keyword = keyword
         self.author = author
-        self.ID = ID
+        #self.ID = ID
 
 def main():  #論文リストを受け取る
 
     paper = parser()
+    print(paper)
+    paper_list = []
     
     for i in range(len(paper)):
         title = paper[i]['title']
         year = paper[i]['year']
         keyword = paper[i]['keyword']
         author = paper[i]['author']
-        ID = paper[i]['ID']
-        paper_list.append(Paper(title,year,author,keyword,ID))
+        #ID = paper[i]['ID']
+        paper_list.append(Paper(title,year,author,keyword))
 
     paper_list = sorted(paper_list, key=attrgetter('year'))
 
@@ -66,9 +80,9 @@ def main():  #論文リストを受け取る
     title = []
     keyword = []
 
-    for e in date:
+    for e in paper_list:
         year.append(e.year)
-        title.append(e.title)
+        #title.append(e.title)
         ID.append(e.ID)
         if e.keyword=='M':
             e.keyword = 0
@@ -82,6 +96,7 @@ def main():  #論文リストを受け取る
 
     for(i,j,k) in zip(keyword,year,ID):
         plt.scatter(i,j)
+        plt.xticks([0,1,2],['M','E','I'])
         plt.annotate(k,xy=(i,j))
 
     plt.show()
